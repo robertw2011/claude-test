@@ -55,10 +55,10 @@ for pi, part in enumerate(PARTS):
         for ts, cap in c["imgs"]:
             t = secs(ts)
             figs.append(
-                f'<figure><a href="{yt(t)}" target="_blank" rel="noopener" '
-                f'aria-label="在 YouTube 打开 {fmt(t)}">'
+                f'<figure><button type="button" class="zoom" data-yt="{yt(t)}" data-t="{fmt(t)}" '
+                f'aria-label="放大查看：{html.escape(cap)}">'
                 f'<img src="img/t{t:05d}.jpg" width="320" height="180" loading="lazy" '
-                f'alt="{html.escape(cap)}"></a>'
+                f'alt="{html.escape(cap)}"></button>'
                 f'<figcaption><a class="ts" href="{yt(t)}" target="_blank" rel="noopener">{fmt(t)}</a> '
                 f'{html.escape(cap)}</figcaption></figure>'
             )
@@ -94,10 +94,10 @@ parts_overview = "".join(
 
 hd_flag = os.path.join(os.path.dirname(__file__), "img", ".hd")
 if os.path.exists(hd_flag):
-    imgnote = "截图从原视频按对应时间点截取；点击截图或时间戳可以跳到 YouTube 原视频对应位置。"
+    imgnote = "截图从原视频按对应时间点截取；点击截图可以放大查看，点击时间戳可以跳到 YouTube 原视频对应位置。"
 else:
     imgnote = ("截图取自 YouTube 进度条预览图（故事板缩略帧，原始分辨率 160×90），只能看出画面大意；"
-               "想看细节请点击截图或时间戳，到原视频对应位置观看。")
+               "点击截图可以放大查看，点击时间戳可以到原视频对应位置观看。")
 
 tpl = open(os.path.join(os.path.dirname(__file__), "template.html"), encoding="utf-8").read()
 out = (
