@@ -92,6 +92,13 @@ parts_overview = "".join(
     for i, p in enumerate(PARTS)
 )
 
+hd_flag = os.path.join(os.path.dirname(__file__), "img", ".hd")
+if os.path.exists(hd_flag):
+    imgnote = "截图从原视频按对应时间点截取；点击截图或时间戳可以跳到 YouTube 原视频对应位置。"
+else:
+    imgnote = ("截图取自 YouTube 进度条预览图（故事板缩略帧，原始分辨率 160×90），只能看出画面大意；"
+               "想看细节请点击截图或时间戳，到原视频对应位置观看。")
+
 tpl = open(os.path.join(os.path.dirname(__file__), "template.html"), encoding="utf-8").read()
 out = (
     tpl.replace("{{TOC}}", "".join(toc))
@@ -100,6 +107,7 @@ out = (
     .replace("{{GLOSSARY}}", gloss)
     .replace("{{PARTS}}", parts_overview)
     .replace("{{YT}}", f"https://youtu.be/{VID}")
+    .replace("{{IMGNOTE}}", imgnote)
 )
 open(os.path.join(os.path.dirname(__file__), "index.html"), "w", encoding="utf-8").write(out)
 print("ok", len(out))
