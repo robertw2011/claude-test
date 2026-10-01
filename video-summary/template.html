@@ -1,0 +1,202 @@
+<title>Claude Code 十小时课程精讲</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* 布局：阅读型课程笔记。左侧粘性章节目录（带时间戳），右侧正文按“部分 → 章节”分层；截图条紧跟每章概要。 */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#18212c; --muted:#5a6777; --line:#d9e0e8;
+  --accent:#2350c8; --accent-soft:#e7edfb; --time:#0b7366; --time-soft:#e0f2ef;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-display:"Noto Serif SC","Songti SC","SimSun",serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1116; --surface:#151b23; --ink:#e4e9ef; --muted:#96a3b2; --line:#253040;
+  --accent:#8db1ff; --accent-soft:#1a2747; --time:#62d5c1; --time-soft:#10302b; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0d1116; --surface:#151b23; --ink:#e4e9ef; --muted:#96a3b2; --line:#253040;
+  --accent:#8db1ff; --accent-soft:#1a2747; --time:#62d5c1; --time-soft:#10302b; color-scheme:dark;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.75}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--accent-soft);color:var(--ink);padding:.05em .35em;border-radius:4px;overflow-wrap:anywhere}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.3;margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:12px 28px}
+.eyebrow{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--time)}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);margin-block:8px 10px}
+.hero .en{color:var(--muted);font-size:1rem;margin:0 0 16px}
+.hero .lead{margin:0 0 18px;max-width:38em}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0;padding:0;list-style:none;font-size:.92rem;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:500}
+.cover{margin:0;max-width:100%}
+.cover img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+.cover figcaption{font-size:.8rem;color:var(--muted);margin-top:6px}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:.9rem;color:var(--muted);margin-block:4px 32px}
+.note b{color:var(--ink)}
+
+/* overview */
+.overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:28px;margin-bottom:40px}
+.overview h2{font-size:1.35rem;margin-bottom:12px}
+.map{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.map a{display:grid;grid-template-columns:2rem minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line);color:var(--ink);text-decoration:none}
+.map a:hover{border-color:var(--accent)}
+.map b{font-family:var(--font-mono);color:var(--accent)}
+.map small{font-family:var(--font-mono);font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.keys{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px;counter-reset:k}
+.keys li{counter-increment:k;display:grid;grid-template-columns:1.8rem minmax(0,1fr);column-gap:8px;font-size:.92rem}
+.keys li::before{content:counter(k);grid-row:span 2;font-family:var(--font-mono);color:var(--time);font-size:1.05rem;line-height:1.6}
+.keys b{display:block;font-weight:700}
+.keys span{color:var(--muted)}
+
+/* main grid */
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:40px;align-items:start}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);max-height:calc(100vh - 32px);overflow:auto;font-size:.86rem;padding-right:4px}
+.toc summary{font-weight:700;cursor:pointer;padding:6px 0;list-style:none}
+.toc summary::-webkit-details-marker{display:none}
+.toc summary::after{content:" ▾";color:var(--muted)}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc-part{font-family:var(--font-display);font-weight:700;margin-top:14px;padding-bottom:2px;border-bottom:1px solid var(--line)}
+.toc a{display:grid;grid-template-columns:3.8rem minmax(0,1fr);gap:6px;padding:4px 6px;margin-inline:-6px;border-radius:6px;color:var(--ink);text-decoration:none}
+.toc a:hover,.toc a.on{background:var(--accent-soft)}
+.toc-t{font-family:var(--font-mono);font-size:.76rem;color:var(--time);font-variant-numeric:tabular-nums;padding-top:.15em}
+
+.part{margin-bottom:24px}
+.part-head{padding-block:28px 6px;border-top:2px solid var(--ink)}
+.part:first-child .part-head{padding-top:4px;border-top:0}
+.part-no{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.08em;color:var(--time)}
+.part-head h2{font-size:1.65rem;margin-block:4px 6px}
+.part-head p{margin:0;color:var(--muted);max-width:44em}
+
+.chapter{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 24px 18px;margin-top:18px;scroll-margin-top:16px}
+.ch-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:.82rem;color:var(--muted)}
+.ch-no{font-family:var(--font-mono);font-size:1.05rem;color:var(--muted)}
+.ts{font-family:var(--font-mono);font-variant-numeric:tabular-nums;color:var(--time);text-decoration:none;font-size:.8rem}
+.ts:hover{text-decoration:underline}
+.ts.big{background:var(--time-soft);padding:2px 9px;border-radius:999px}
+.chapter h3{font-size:1.4rem;margin-block:8px 6px}
+.chapter h3 small{font-family:var(--font-body);font-weight:400;font-size:.85rem;color:var(--muted);margin-left:.4em}
+.lede{margin:0 0 14px;max-width:46em}
+.figs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-block:4px 16px}
+.figs figure{margin:0;min-width:0}
+.figs img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:16/9;border-radius:6px;border:1px solid var(--line);background:var(--bg)}
+.figs a:hover img{border-color:var(--time)}
+.figs figcaption{font-size:.8rem;color:var(--muted);margin-top:5px;line-height:1.5}
+.block{margin-top:12px}
+.block h4{font-size:1rem;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.block h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--accent);flex:none}
+.block ul{margin:0;padding-left:1.2em;max-width:48em}
+.block li{margin-block:4px}
+.block li::marker{color:var(--muted)}
+.terms{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:16px 0 2px;padding-top:12px;border-top:1px dashed var(--line);font-size:.82rem}
+.terms span{color:var(--muted);margin-right:4px}
+.terms em{font-style:normal;font-family:var(--font-mono);font-size:.76rem;background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:999px}
+
+.gloss{margin-top:44px}
+.gloss h2{font-size:1.45rem;margin-bottom:12px}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;color:var(--muted);font-weight:500;letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+td:first-child{font-family:var(--font-mono);font-size:.82rem;color:var(--accent);white-space:nowrap}
+td:nth-child(2){white-space:nowrap;font-weight:500}
+footer{margin-top:40px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+
+@media (max-width:960px){
+  .hero,.overview{grid-template-columns:minmax(0,1fr)}
+  .layout{grid-template-columns:minmax(0,1fr);gap:8px}
+  .toc{position:static;max-height:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 14px 10px}
+}
+@media (max-width:600px){
+  .keys{grid-template-columns:minmax(0,1fr)}
+  .chapter{padding:18px 16px 14px}
+  .figs{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">YouTube 课程精讲 · 简体中文</div>
+      <h1>Claude Code 十小时课程精讲</h1>
+      <p class="en" lang="en">Build &amp; Sell with Claude Code (10+ Hour Course)</p>
+      <p class="lead">从零基础到能做自动化、网站、应用和个人执行助理，再到把这些能力卖给企业。按视频的 30 个章节逐一梳理要点，关键术语保留英文，每章配原视频截图，点击时间戳可以跳到对应位置。</p>
+      <ul class="facts">
+        <li>作者 <b>Nate Herk</b>（AI Automation 频道）</li>
+        <li>时长 <b>10:00:05</b></li>
+        <li><b>30</b> 章 · <b>8</b> 个部分</li>
+        <li><a href="{{YT}}" target="_blank" rel="noopener">在 YouTube 观看原视频 ↗</a></li>
+      </ul>
+    </div>
+    <figure class="cover">
+      <a href="{{YT}}" target="_blank" rel="noopener"><img src="img/cover.jpg" width="960" height="540" alt="课程封面：FULL COURSE — Setup, Tokens, Commands, Skills, Websites, Sub-agents, Agent Teams, Make Money"></a>
+      <figcaption>视频封面</figcaption>
+    </figure>
+  </header>
+
+  <p class="note"><b>关于本页：</b>内容依据视频的英文自动字幕通读整理，章节按视频自带的时间戳划分。截图取自 YouTube 进度条预览图（故事板缩略帧，原始分辨率 160×90），只能看出画面大意；想看细节请点击截图或时间戳，到原视频对应位置观看。视频里提到的价格、数据和工具状态以录制时为准。</p>
+
+  <section class="overview" aria-label="课程概览">
+    <div>
+      <h2>学习地图</h2>
+      <ol class="map">{{PARTS}}</ol>
+    </div>
+    <div>
+      <h2>全课十个关键收获</h2>
+      <ol class="keys">{{TAKEAWAYS}}</ol>
+    </div>
+  </section>
+
+  <div class="layout">
+    <nav class="toc" aria-label="章节目录">
+      <details id="toc-details" open>
+        <summary>章节目录</summary>
+        <ol>{{TOC}}</ol>
+      </details>
+    </nav>
+    <main>
+      {{BODY}}
+      <section class="gloss" id="glossary">
+        <h2>术语表（中英对照）</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>英文</th><th>中文</th><th>说明</th></tr></thead>
+            <tbody>{{GLOSSARY}}</tbody>
+          </table>
+        </div>
+      </section>
+      <footer>
+        原视频：<a href="{{YT}}" target="_blank" rel="noopener">Build &amp; Sell with Claude Code (10+ Hour Course) — Nate Herk | AI Automation</a>。本页是学习笔记，版权归原作者所有。
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var d=document.getElementById('toc-details');
+  try{ if(window.matchMedia('(max-width: 960px)').matches){ d.removeAttribute('open'); } }catch(e){}
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  d.addEventListener('click',function(e){
+    if(e.target.closest('a') && window.matchMedia('(max-width: 960px)').matches){ d.removeAttribute('open'); }
+  });
+  if(!('IntersectionObserver' in window)) return;
+  var map={}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)]=a; });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('on'); });
+        var a=map[en.target.id]; if(a){ a.classList.add('on'); }
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('.chapter').forEach(function(c){ io.observe(c); });
+})();
+</script>
